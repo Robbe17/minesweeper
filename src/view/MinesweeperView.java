@@ -113,7 +113,7 @@ public class MinesweeperView implements IGameStateNotifier {
         layoutConstraints.weightx = 1.0;
         layoutConstraints.weighty = 1.0;
         this.window.add(world, layoutConstraints);
-        this.window.setSize(500, 1);
+        this.window.setSize(500, 500);
         this.window.setVisible(true);
         this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
         try {
