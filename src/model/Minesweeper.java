@@ -5,6 +5,7 @@ public class Minesweeper extends AbstractMineSweeper {
     private AbstractTile[][] board;
     private int with;
     private int height;
+    private int amountbombs;
 
 
     public Minesweeper(){
@@ -37,14 +38,22 @@ public class Minesweeper extends AbstractMineSweeper {
     public void startNewGame(int row, int col, int explosionCount) {
         board = new Tile[row][col];
         double kans = explosionCount/(row*col);
+        height = row;
+        with = col;
+        this.amountbombs = explosionCount;
         int bombs = 0;
-        for (int i = 0; i <row ; i++) {
-            for (int j = 0; j < col; j++) {
-                if(Math.random() < kans && bombs<explosionCount){
-                    board[i][j] = generateExplosiveTile();
-                }
-                else{
-                    board[i][j] = generateEmptyTile();
+        while ( bombs< explosionCount) {
+            for (int i = 0; i < row; i++) {
+                System.out.print('\n');
+                for (int j = 0; j < col; j++) {
+                    if (Math.random() < kans && bombs < explosionCount) {
+                        board[i][j] = generateExplosiveTile();
+                        bombs++;
+                        System.out.print(1 + " ");
+                    } else {
+                        board[i][j] = generateEmptyTile();
+                        System.out.print(0 + " ");
+                    }
                 }
             }
         }
@@ -66,6 +75,7 @@ public class Minesweeper extends AbstractMineSweeper {
     }
 
     @Override
+    //TODO wat moet dit doen?
     public void setWorld(AbstractTile[][] world) {
 
     }
@@ -86,6 +96,7 @@ public class Minesweeper extends AbstractMineSweeper {
     }
 
     @Override
+    // TODO is dit alle nul tegels clearen?
     public void deactivateFirstTileRule() {
 
     }
