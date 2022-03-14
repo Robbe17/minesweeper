@@ -1,5 +1,8 @@
 package model;
 
+import view.MinesweeperView;
+import view.TileView;
+
 public class Tile extends AbstractTile {
     private boolean bomb;
     private boolean flagged;
@@ -11,14 +14,12 @@ public class Tile extends AbstractTile {
         this.bomb = bomb;
         flagged = false;
         open = false;
-
     }
+
 
     @Override
     public boolean open() {
         open = true;
-        //getCountExplosiveNeighbours(); // TODO make method getCountExplosiveNeighbours()
-        //TODO wat moet er gereturned worden
         return false;
     }
 

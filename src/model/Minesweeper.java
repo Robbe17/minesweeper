@@ -16,6 +16,27 @@ public class Minesweeper extends AbstractMineSweeper {
         return board;
     }
 
+    public int getCountExplosiveNeighbours(int x, int y){
+        try {
+            if (getTile(x, y).isExplosive()) {
+                return 10;
+            } else {
+                int counter = 0;
+                for (int i = x - 1; i < x + 2; i++) {
+                    for (int j = y - 1; j < y + 2; j++) {
+                        if (getTile(x, y).isExplosive()) {
+                            counter++;
+                        }
+                    }
+                }
+                return counter;
+            }
+        }
+        catch(Exception e){
+            return 100;
+        }
+    }
+
     @Override
     public int getWidth() {
         return with;
