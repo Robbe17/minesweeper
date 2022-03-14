@@ -125,16 +125,20 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void open(int x, int y) {
         getTile(x, y).open();
+        System.out.println("Tile [" + x + ";" + y + "] opened");
+
     }
 
     @Override
     public void flag(int x, int y) {
         getTile(x, y).flag();
+        System.out.println("Tile [" + x + ";" + y + "] flagged");
     }
 
     @Override
     public void unflag(int x, int y) {
         getTile(x, y).unflag();
+        System.out.println("Tile [" + x + ";" + y + "] unflagged");
     }
 
     @Override
