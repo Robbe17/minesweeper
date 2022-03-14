@@ -91,13 +91,15 @@ public class Minesweeper extends AbstractMineSweeper {
         int bombs = 0;
         //double kans = explosionCount/(getWidth()*getHeight());
         Random rand = new Random();
-        int randNum = rand.nextInt(77);
+        //int randNum = rand.nextInt(77);
 
-        while ( bombs< explosionCount) {
+
             for (int i = 0; i < getHeight(); i++) {
                 System.out.print('\n');
                 for (int j = 0; j < getWidth(); j++) {
-                    if (randNum < 20 && bombs < explosionCount) {
+                    int randNum = rand.nextInt(77);
+
+                    if (randNum < 11 && bombs < explosionCount) {
                         board[i][j] = generateExplosiveTile();
                         bombs++;
                         System.out.print(1 + " ");
@@ -105,7 +107,16 @@ public class Minesweeper extends AbstractMineSweeper {
                         board[i][j] = generateEmptyTile();
                         System.out.print(0 + " ");
                     }
-                    board[i][j].setTileNotifier(new TileView(i,j));
+                    //board[i][j].setTileNotifier(new TileView(i, j));
+                }
+            }
+        if(bombs < explosionCount) {
+            while (bombs < explosionCount) {
+                int x = rand.nextInt(getHeight());
+                int y = rand.nextInt(getWidth());
+                if (!world[x][y].isExplosive()) {
+                    world[x][y] = generateExplosiveTile();
+                    bombs++;
                 }
             }
         }

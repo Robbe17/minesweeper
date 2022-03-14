@@ -16,6 +16,9 @@ public class Tile extends AbstractTile {
         open = false;
     }
 
+    public void setBomb(boolean bomb) {
+        this.bomb = bomb;
+    }
 
     @Override
     public boolean open() {
