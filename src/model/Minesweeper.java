@@ -1,11 +1,14 @@
 package model;
 
+import view.TileView;
+import java.util.Random;
+
 public class Minesweeper extends AbstractMineSweeper {
 
     private AbstractTile[][] board;
     private int with;
     private int height;
-    private int amountbombs;
+    private int explosionCount;
 
 
     public Minesweeper(){
@@ -39,12 +42,12 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public int getWidth() {
-        return with;
+        return board[0].length;
     }
 
     @Override
     public int getHeight() {
-        return height;
+        return board.length;
     }
 
     @Override
@@ -60,26 +63,11 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void startNewGame(int row, int col, int explosionCount) {
         board = new Tile[row][col];
-        double kans = explosionCount/(row*col);
-        height = row;
-        with = col;
-        this.amountbombs = explosionCount;
-        int bombs = 0;
-        while ( bombs< explosionCount) {
-            for (int i = 0; i < row; i++) {
-                System.out.print('\n');
-                for (int j = 0; j < col; j++) {
-                    if (Math.random() < kans && bombs < explosionCount) {
-                        board[i][j] = generateExplosiveTile();
-                        bombs++;
-                        System.out.print(1 + " ");
-                    } else {
-                        board[i][j] = generateEmptyTile();
-                        System.out.print(0 + " ");
-                    }
-                }
-            }
-        }
+        this.explosionCount = explosionCount;
+
+        this.viewNotifier.notifyNewGame(row,col);
+        setWorld(board);
+
     }
 
     @Override
@@ -100,7 +88,27 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     //TODO wat moet dit doen?
     public void setWorld(AbstractTile[][] world) {
+        int bombs = 0;
+        //double kans = explosionCount/(getWidth()*getHeight());
+        Random rand = new Random();
+        int randNum = rand.nextInt(77);
 
+        while ( bombs< explosionCount) {
+            for (int i = 0; i < getHeight(); i++) {
+                System.out.print('\n');
+                for (int j = 0; j < getWidth(); j++) {
+                    if (randNum < 20 && bombs < explosionCount) {
+                        board[i][j] = generateExplosiveTile();
+                        bombs++;
+                        System.out.print(1 + " ");
+                    } else {
+                        board[i][j] = generateEmptyTile();
+                        System.out.print(0 + " ");
+                    }
+                    board[i][j].setTileNotifier(new TileView(i,j));
+                }
+            }
+        }
     }
 
     @Override
