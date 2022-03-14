@@ -12,7 +12,9 @@ public class Minesweeper extends AbstractMineSweeper {
 
     }
 
-
+    public AbstractTile[][] getBoard() {
+        return board;
+    }
 
     @Override
     public int getWidth() {
