@@ -20,10 +20,11 @@ public class Tile extends AbstractTile {
         this.bomb = bomb;
     }
 
+
     @Override
     public boolean open() {
         open = true;
-        return bomb;
+        return false;
     }
 
     @Override
@@ -48,6 +49,6 @@ public class Tile extends AbstractTile {
 
     @Override
     public boolean isOpened() {
-        return false;
+        return open;
     }
 }

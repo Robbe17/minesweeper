@@ -23,33 +23,27 @@ public class Minesweeper extends AbstractMineSweeper {
     }
 
     public int getCountExplosiveNeighbours(int x, int y){
-        //return 7;
-        //try {
         int counter = 0;
-            if (getTile(x, y).isExplosive()) {
-                return 10;
-            }
-            else {
-
-                for (int i = x - 1; i < x + 2; i++) {
-                    for (int j = y - 1; j < y + 2; j++) {
-                        try{
-                            if (getTile(i, j).isExplosive()) {
+        if (getTile(x, y).isExplosive()) {
+            return 10;
+        }
+        else {
+            for (int i = x - 1; i < x + 2; i++) {
+                for (int j = y - 1; j < y + 2; j++) {
+                    try{
+                        if (getTile(i, j).isExplosive()) {
                             counter++;
-                             }
                         }
-                        catch (Exception e){
-
-                        }
+                    }
+                    catch (Exception e){
 
                     }
-                }
 
-                return counter;
+                }
             }
-        //}
-        //catch(Exception e){
-            //return 100;}
+
+            return counter;
+        }
     }
 
     @Override
@@ -137,6 +131,7 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void open(int x, int y) {
 
+
         // wat als het een bom is
         if (getTile(x,y).isExplosive()){
             this.viewNotifier.notifyExploded(x, y);
@@ -147,6 +142,22 @@ public class Minesweeper extends AbstractMineSweeper {
         // wat als het geen bom is
         else{
             this.viewNotifier.notifyOpened(x,y, getCountExplosiveNeighbours(x,y));
+            getTile(x,y).open();
+            if (getCountExplosiveNeighbours(x,y) ==0){
+                    for (int i = x - 1; i < x + 2; i++) {
+                        for (int j = y - 1; j < y + 2; j++) {
+                            try{
+                                if (!getTile(i,j).isOpened()){
+                                    open(i,j);
+                                }
+                            }
+                            catch (Exception e){
+
+                            }
+
+                        }
+                    }
+            }
             System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb");
 
         }
