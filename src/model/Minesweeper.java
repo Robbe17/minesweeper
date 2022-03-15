@@ -15,29 +15,41 @@ public class Minesweeper extends AbstractMineSweeper {
 
     }
 
+    //TODO hoe weten wannneer je gewonnen bent aka wanneer heb je alle tegels geopend
+
+
     public AbstractTile[][] getBoard() {
         return board;
     }
 
     public int getCountExplosiveNeighbours(int x, int y){
-        try {
+        //return 7;
+        //try {
+        int counter = 0;
             if (getTile(x, y).isExplosive()) {
                 return 10;
-            } else {
-                int counter = 0;
+            }
+            else {
+
                 for (int i = x - 1; i < x + 2; i++) {
                     for (int j = y - 1; j < y + 2; j++) {
-                        if (getTile(x, y).isExplosive()) {
+                        try{
+                            if (getTile(i, j).isExplosive()) {
                             counter++;
+                             }
                         }
+                        catch (Exception e){
+
+                        }
+
                     }
                 }
+
                 return counter;
             }
-        }
-        catch(Exception e){
-            return 100;
-        }
+        //}
+        //catch(Exception e){
+            //return 100;}
     }
 
     @Override
@@ -74,19 +86,20 @@ public class Minesweeper extends AbstractMineSweeper {
     public void toggleFlag(int x, int y) {
         if (getTile(x, y).isFlagged()){
             getTile(x, y).unflag();
+            this.viewNotifier.notifyUnflagged(x,y);
         }
         else {
             getTile(x, y).flag();
+            this.viewNotifier.notifyFlagged(x,y);
         }
     }
 
     @Override
     public AbstractTile getTile(int x, int y) {
-        return board[x][y];
+        return board[y][x];//wout aangepast // thx wout
     }
 
     @Override
-    //TODO wat moet dit doen?
     public void setWorld(AbstractTile[][] world) {
         int bombs = 0;
         //double kans = explosionCount/(getWidth()*getHeight());
@@ -98,7 +111,6 @@ public class Minesweeper extends AbstractMineSweeper {
                 System.out.print('\n');
                 for (int j = 0; j < getWidth(); j++) {
                     int randNum = rand.nextInt(77);
-
                     if (randNum < 11 && bombs < explosionCount) {
                         board[i][j] = generateExplosiveTile();
                         bombs++;
@@ -124,20 +136,35 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public void open(int x, int y) {
-        getTile(x, y).open();
-        System.out.println("Tile [" + x + ";" + y + "] opened");
+
+        // wat als het een bom is
+        if (getTile(x,y).isExplosive()){
+            this.viewNotifier.notifyExploded(x, y);
+            this.viewNotifier.notifyGameLost();
+            System.out.println("Tile [" + x + ";" + y + "] opened it was a bomb you are dead");
+
+        }
+        // wat als het geen bom is
+        else{
+            this.viewNotifier.notifyOpened(x,y, getCountExplosiveNeighbours(x,y));
+            System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb");
+
+        }
+        //System.out.println("Tile [" + x + ";" + y + "] opened");
 
     }
 
     @Override
     public void flag(int x, int y) {
         getTile(x, y).flag();
+        this.viewNotifier.notifyFlagged(x,y);
         System.out.println("Tile [" + x + ";" + y + "] flagged");
     }
 
     @Override
     public void unflag(int x, int y) {
         getTile(x, y).unflag();
+        this.viewNotifier.notifyUnflagged(x,y);
         System.out.println("Tile [" + x + ";" + y + "] unflagged");
     }
 

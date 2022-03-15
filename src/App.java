@@ -10,11 +10,12 @@ public class App {
         //Uncomment the lines below once your game model code is ready; don't forget to import your game model 
         PlayableMinesweeper model = new Minesweeper();
         view.setGameModel(model);
-        model.setGameStateNotifier(view);
+        model.startNewGame(Difficulty.EASY);
+
         /**
             Your code to bind your game model to the game user interface
         */
-        
+
         
         //model.startNewGame(Difficulty.EASY);
     }

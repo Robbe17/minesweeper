@@ -23,7 +23,7 @@ public class Tile extends AbstractTile {
     @Override
     public boolean open() {
         open = true;
-        return false;
+        return bomb;
     }
 
     @Override
