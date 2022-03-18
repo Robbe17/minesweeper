@@ -30,11 +30,13 @@ public class TileView extends JButton implements ITileStateNotifier {
 
     @Override
     public void notifyFlagged() {
+        super.setText("F");
         super.setIcon(flagIcon);
     }
 
     @Override
     public void notifyUnflagged() {
+        super.setText("");
         super.setIcon(null);
     }
 
@@ -45,7 +47,7 @@ public class TileView extends JButton implements ITileStateNotifier {
 
     @Override
     public void notifyExplode() {
-        super.setText("");
+        super.setText("B");
         super.setIcon(bombIcon);
         super.setEnabled(false);
     }

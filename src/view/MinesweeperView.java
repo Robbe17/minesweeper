@@ -34,7 +34,7 @@ public class MinesweeperView implements IGameStateNotifier {
     public static final class AssetPath {
         public static final String CLOCK_ICON = "./assets/icons/clock.png";
         public static final String FLAG_ICON = "./assets/icons/flag.png";
-        public static final String BOMB_ICON = "bomb.png";
+        public static final String BOMB_ICON = "bomb.png.";
     }
     private PlayableMinesweeper gameModel;
     private JFrame window;

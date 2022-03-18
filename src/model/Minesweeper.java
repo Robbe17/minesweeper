@@ -79,11 +79,11 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void toggleFlag(int x, int y) {
         if (getTile(x, y).isFlagged()){
-            getTile(x, y).unflag();
+            unflag(x,y);
             this.viewNotifier.notifyUnflagged(x,y);
         }
         else {
-            getTile(x, y).flag();
+            flag(x,y);
             this.viewNotifier.notifyFlagged(x,y);
         }
     }
@@ -162,6 +162,7 @@ public class Minesweeper extends AbstractMineSweeper {
 
         }
         //System.out.println("Tile [" + x + ";" + y + "] opened");
+        //TODO kijk of het de laatse niet bom tegel was die geopend was en dan //this.viewNotifier.notifyGameWon();
 
     }
 
