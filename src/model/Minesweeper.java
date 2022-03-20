@@ -9,13 +9,15 @@ public class Minesweeper extends AbstractMineSweeper {
     private int with;
     private int height;
     private int explosionCount;
+    private int playercounter;//hoeveel vakjes er nog ingedrukt moeten worden init line 73
 
 
     public Minesweeper(){
 
     }
 
-    //TODO hoe weten wannneer je gewonnen bent aka wanneer heb je alle tegels geopend
+    //TODO hoe weten wannneer je gewonnen bent aka wanneer heb je alle tegels geopend-->line73
+    //TODO eerst tegel mag geen bom zijn.
 
 
     public AbstractTile[][] getBoard() {
@@ -69,6 +71,7 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void startNewGame(int row, int col, int explosionCount) {
         board = new Tile[row][col];
+        playercounter = (row*col)-explosionCount;
         this.explosionCount = explosionCount;
 
         this.viewNotifier.notifyNewGame(row,col);
@@ -149,6 +152,10 @@ public class Minesweeper extends AbstractMineSweeper {
                             try{
                                 if (!getTile(i,j).isOpened()){
                                     open(i,j);
+                                    playercounter = playercounter - 1;
+                                    if (playercounter == 0){
+                                        this.viewNotifier.notifyGameWon();
+                                    }
                                 }
                             }
                             catch (Exception e){
@@ -158,12 +165,10 @@ public class Minesweeper extends AbstractMineSweeper {
                         }
                     }
             }
-            System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb");
+            System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb and there are " + playercounter + " tiles left");
 
         }
         //System.out.println("Tile [" + x + ";" + y + "] opened");
-        //TODO kijk of het de laatse niet bom tegel was die geopend was en dan //this.viewNotifier.notifyGameWon();
-
     }
 
     @Override
@@ -182,6 +187,7 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     // TODO is dit alle nul tegels clearen?
+    //volgens mij is het dat de eerste tegel geen bom mag zijn
     public void deactivateFirstTileRule() {
 
     }
