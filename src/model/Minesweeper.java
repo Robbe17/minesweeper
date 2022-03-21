@@ -11,6 +11,7 @@ public class Minesweeper extends AbstractMineSweeper {
     private int explosionCount;
     private int playercounter;//hoeveel vakjes er nog ingedrukt moeten worden init line 73
     private int flagCounter;
+    private int countingClicks;
 
 
     public Minesweeper(){
@@ -70,7 +71,8 @@ public class Minesweeper extends AbstractMineSweeper {
     public void startNewGame(int row, int col, int explosionCount) {
         board = new Tile[row][col];
         playercounter = (row*col)-explosionCount;
-        flagCounter=0;
+        countingClicks = 0;
+
         this.explosionCount = explosionCount;
 
         this.viewNotifier.notifyNewGame(row,col);
@@ -132,20 +134,29 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public void open(int x, int y) {
-        unflag(x,y);
+
 
         // wat als het een bom is
         if (getTile(x,y).isExplosive()){
-            this.viewNotifier.notifyExploded(x, y);
-            this.viewNotifier.notifyGameLost();
+            countingClicks = countingClicks + 1;
+            if (countingClicks == 1){
+                //TODO roep method op om bom te verwiselen met een lege tile.
+            }
+            else{
+                this.viewNotifier.notifyExploded(x, y);
+                this.viewNotifier.notifyGameLost();
+            }
             System.out.println("Tile [" + x + ";" + y + "] opened it was a bomb you are dead");
 
         }
         // wat als het geen bom is
         else{
             this.viewNotifier.notifyOpened(x,y, getCountExplosiveNeighbours(x,y));
+
+
             if (!getTile(x ,y).isOpened()){
                 playercounter = playercounter - 1;
+                countingClicks = countingClicks + 1;
             }
             getTile(x,y).open();
 
@@ -173,18 +184,14 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void flag(int x, int y) {
         getTile(x, y).flag();
-        flagCounter++;
         this.viewNotifier.notifyFlagged(x,y);
-        this.viewNotifier.notifyFlagCountChanged(flagCounter);
         System.out.println("Tile [" + x + ";" + y + "] flagged");
     }
 
     @Override
     public void unflag(int x, int y) {
         getTile(x, y).unflag();
-        flagCounter--;
         this.viewNotifier.notifyUnflagged(x,y);
-        this.viewNotifier.notifyFlagCountChanged(flagCounter);
         System.out.println("Tile [" + x + ";" + y + "] unflagged");
     }
 
