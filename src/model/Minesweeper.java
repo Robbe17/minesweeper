@@ -72,6 +72,7 @@ public class Minesweeper extends AbstractMineSweeper {
         board = new Tile[row][col];
         playercounter = (row*col)-explosionCount;
         countingClicks = 0;
+        flagCounter=0;
 
         this.explosionCount = explosionCount;
 
