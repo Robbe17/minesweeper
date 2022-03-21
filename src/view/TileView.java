@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import java.awt.*;
 import java.awt.event.MouseListener;
 
 import notifier.ITileStateNotifier;
@@ -31,6 +32,7 @@ public class TileView extends JButton implements ITileStateNotifier {
     @Override
     public void notifyFlagged() {
         super.setText("F");
+        super.setForeground(new Color(255,0,255));
         super.setIcon(flagIcon);
     }
 

@@ -15,15 +15,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.DimensionUIResource;
 
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
 import notifier.IGameStateNotifier;
@@ -75,6 +72,7 @@ public class MinesweeperView implements IGameStateNotifier {
         });
         
         this.window.setJMenuBar(this.menuBar);
+
 
         try {
             JLabel clockIcon = new JLabel(new ImageIcon(ImageIO.read(new File(AssetPath.CLOCK_ICON))));
