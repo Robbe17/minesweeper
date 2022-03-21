@@ -38,12 +38,9 @@ public class Minesweeper extends AbstractMineSweeper {
                         }
                     }
                     catch (Exception e){
-
                     }
-
                 }
             }
-
             return counter;
         }
     }
@@ -145,28 +142,28 @@ public class Minesweeper extends AbstractMineSweeper {
         // wat als het geen bom is
         else{
             this.viewNotifier.notifyOpened(x,y, getCountExplosiveNeighbours(x,y));
+            if (!getTile(x ,y).isOpened()){
+                playercounter = playercounter - 1;
+            }
             getTile(x,y).open();
-            if (getCountExplosiveNeighbours(x,y) ==0){
-                    for (int i = x - 1; i < x + 2; i++) {
-                        for (int j = y - 1; j < y + 2; j++) {
-                            try{
-                                if (!getTile(i,j).isOpened()){
-                                    open(i,j);
-                                    playercounter = playercounter - 1;
-                                    if (playercounter == 0){
-                                        this.viewNotifier.notifyGameWon();
-                                    }
-                                }
-                            }
-                            catch (Exception e){
 
-                            }
 
+            if (playercounter == 0) {
+                this.viewNotifier.notifyGameWon();
+            }
+            if (getCountExplosiveNeighbours(x,y) ==0) {
+                for (int i = x - 1; i < x + 2; i++) {
+                    for (int j = y - 1; j < y + 2; j++) {
+                        try {
+                            if (!getTile(i, j).isOpened()) {
+                                open(i, j);
+                            }
+                        } catch (Exception e) {
                         }
                     }
+                }
             }
             System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb and there are " + playercounter + " tiles left");
-
         }
         //System.out.println("Tile [" + x + ";" + y + "] opened");
     }
