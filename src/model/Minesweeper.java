@@ -10,6 +10,7 @@ public class Minesweeper extends AbstractMineSweeper {
     private int height;
     private int explosionCount;
     private int playercounter;//hoeveel vakjes er nog ingedrukt moeten worden init line 73
+    private int flagCounter;
 
 
     public Minesweeper(){
@@ -69,6 +70,7 @@ public class Minesweeper extends AbstractMineSweeper {
     public void startNewGame(int row, int col, int explosionCount) {
         board = new Tile[row][col];
         playercounter = (row*col)-explosionCount;
+        flagCounter=0;
         this.explosionCount = explosionCount;
 
         this.viewNotifier.notifyNewGame(row,col);
@@ -130,7 +132,7 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public void open(int x, int y) {
-
+        unflag(x,y);
 
         // wat als het een bom is
         if (getTile(x,y).isExplosive()){
@@ -171,14 +173,18 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void flag(int x, int y) {
         getTile(x, y).flag();
+        flagCounter++;
         this.viewNotifier.notifyFlagged(x,y);
+        this.viewNotifier.notifyFlagCountChanged(flagCounter);
         System.out.println("Tile [" + x + ";" + y + "] flagged");
     }
 
     @Override
     public void unflag(int x, int y) {
         getTile(x, y).unflag();
+        flagCounter--;
         this.viewNotifier.notifyUnflagged(x,y);
+        this.viewNotifier.notifyFlagCountChanged(flagCounter);
         System.out.println("Tile [" + x + ";" + y + "] unflagged");
     }
 
