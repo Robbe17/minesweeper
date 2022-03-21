@@ -58,7 +58,7 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void startNewGame(Difficulty level) {
         switch (level){
-            case EASY -> startNewGame(8,8,20);
+            case EASY -> startNewGame(8,8,10);
             case MEDIUM -> startNewGame(16,16,40);
             case HARD -> startNewGame(16,30,99);
 
