@@ -9,13 +9,15 @@ public class Minesweeper extends AbstractMineSweeper {
     private int with;
     private int height;
     private int explosionCount;
+    private int playercounter;//hoeveel vakjes er nog ingedrukt moeten worden init line 73
 
 
     public Minesweeper(){
 
     }
 
-    //TODO hoe weten wannneer je gewonnen bent aka wanneer heb je alle tegels geopend
+    //TODO hoe weten wannneer je gewonnen bent aka wanneer heb je alle tegels geopend-->line73
+    //TODO eerst tegel mag geen bom zijn.
 
 
     public AbstractTile[][] getBoard() {
@@ -36,7 +38,6 @@ public class Minesweeper extends AbstractMineSweeper {
                         }
                     }
                     catch (Exception e){
-
                     }
                 }
             }
@@ -67,6 +68,7 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void startNewGame(int row, int col, int explosionCount) {
         board = new Tile[row][col];
+        playercounter = (row*col)-explosionCount;
         this.explosionCount = explosionCount;
 
         this.viewNotifier.notifyNewGame(row,col);
@@ -140,28 +142,30 @@ public class Minesweeper extends AbstractMineSweeper {
         // wat als het geen bom is
         else{
             this.viewNotifier.notifyOpened(x,y, getCountExplosiveNeighbours(x,y));
+            if (!getTile(x ,y).isOpened()){
+                playercounter = playercounter - 1;
+            }
             getTile(x,y).open();
-            if (getCountExplosiveNeighbours(x,y) ==0){
-                    for (int i = x - 1; i < x + 2; i++) {
-                        for (int j = y - 1; j < y + 2; j++) {
-                            try{
-                                if (!getTile(i,j).isOpened()){
-                                    open(i,j);
-                                }
-                            }
-                            catch (Exception e){
 
-                            }
 
+            if (playercounter == 0) {
+                this.viewNotifier.notifyGameWon();
+            }
+            if (getCountExplosiveNeighbours(x,y) ==0) {
+                for (int i = x - 1; i < x + 2; i++) {
+                    for (int j = y - 1; j < y + 2; j++) {
+                        try {
+                            if (!getTile(i, j).isOpened()) {
+                                open(i, j);
+                            }
+                        } catch (Exception e) {
                         }
                     }
+                }
             }
-            System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb");
-
+            System.out.println("Tile [" + x + ";" + y + "] opened it wasn't a bomb and there are " + playercounter + " tiles left");
         }
         //System.out.println("Tile [" + x + ";" + y + "] opened");
-        //TODO kijk of het de laatse niet bom tegel was die geopend was en dan //this.viewNotifier.notifyGameWon();
-
     }
 
     @Override
@@ -180,6 +184,7 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     // TODO is dit alle nul tegels clearen?
+    //volgens mij is het dat de eerste tegel geen bom mag zijn
     public void deactivateFirstTileRule() {
 
     }
