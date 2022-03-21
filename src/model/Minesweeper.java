@@ -134,6 +134,9 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public void open(int x, int y) {
+        if (getTile(x,y).isFlagged()){
+            unflag(x,y);
+        }
 
 
         // wat als het een bom is
@@ -183,14 +186,18 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public void flag(int x, int y) {
+        flagCounter++;
         getTile(x, y).flag();
+        this.viewNotifier.notifyFlagCountChanged(flagCounter);
         this.viewNotifier.notifyFlagged(x,y);
         System.out.println("Tile [" + x + ";" + y + "] flagged");
     }
 
     @Override
     public void unflag(int x, int y) {
+        flagCounter--;
         getTile(x, y).unflag();
+        this.viewNotifier.notifyFlagCountChanged(flagCounter);
         this.viewNotifier.notifyUnflagged(x,y);
         System.out.println("Tile [" + x + ";" + y + "] unflagged");
     }
