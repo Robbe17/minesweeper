@@ -15,37 +15,13 @@ public class Minesweeper extends AbstractMineSweeper {
 
 
     public Minesweeper(){
-
     }
-
-    //TODO hoe weten wanneer je gewonnen bent aka wanneer heb je alle tegels geopend-->line73
-    //TODO eerst tegel mag geen bom zijn.
-
 
     public AbstractTile[][] getBoard() {
         return board;
     }
 
-    public int getCountExplosiveNeighbours(int x, int y){
-        int counter = 0;
-        if (getTile(x, y).isExplosive()) {
-            return 10;
-        }
-        else {
-            for (int i = x - 1; i < x + 2; i++) {
-                for (int j = y - 1; j < y + 2; j++) {
-                    try{
-                        if (getTile(i, j).isExplosive()) {
-                            counter++;
-                        }
-                    }
-                    catch (Exception e){
-                    }
-                }
-            }
-            return counter;
-        }
-    }
+
 
     @Override
     public int getWidth() {
@@ -107,18 +83,14 @@ public class Minesweeper extends AbstractMineSweeper {
 
 
             for (int i = 0; i < getHeight(); i++) {
-                System.out.print('\n');
                 for (int j = 0; j < getWidth(); j++) {
                     int randNum = rand.nextInt(77);
                     if (randNum < 11 && bombs < explosionCount) {
                         board[i][j] = generateExplosiveTile();
                         bombs++;
-                        System.out.print(1 + " ");
                     } else {
                         board[i][j] = generateEmptyTile();
-                        System.out.print(0 + " ");
                     }
-                    //board[i][j].setTileNotifier(new TileView(i, j));
                 }
             }
         if(bombs < explosionCount) {
@@ -131,6 +103,7 @@ public class Minesweeper extends AbstractMineSweeper {
                 }
             }
         }
+        printBoard();
     }
 
     @Override
@@ -145,6 +118,7 @@ public class Minesweeper extends AbstractMineSweeper {
         if (countingClicks == 1){
             firstTileRule(x,y);
             System.out.println("was bom verandert");
+            printBoard();
         }
 
 
@@ -203,8 +177,6 @@ public class Minesweeper extends AbstractMineSweeper {
     }
 
     @Override
-    // TODO is dit alle nul tegels clearen?
-    //volgens mij is het dat de eerste tegel geen bom mag zijn
     public void deactivateFirstTileRule() {
 
     }
@@ -220,6 +192,27 @@ public class Minesweeper extends AbstractMineSweeper {
         Tile bomb = new Tile(true);
         return bomb;
     }
+    public int getCountExplosiveNeighbours(int x, int y){
+        int counter = 0;
+        if (getTile(x, y).isExplosive()) {
+            return 10;
+        }
+        else {
+            for (int i = x - 1; i < x + 2; i++) {
+                for (int j = y - 1; j < y + 2; j++) {
+                    try{
+                        if (getTile(i, j).isExplosive()) {
+                            counter++;
+                        }
+                    }
+                    catch (Exception e){
+                    }
+                }
+            }
+            return counter;
+        }
+    }
+
     public void openAllBombs(){
         for (int row = 0; row < getHeight(); row++) {
             for (int col = 0; col < getWidth(); col++) {
@@ -242,6 +235,22 @@ public class Minesweeper extends AbstractMineSweeper {
                 changed=true;
             }
         }
+    }
+
+    public void printBoard(){
+        for (int row = 0; row < getHeight(); row++) {
+            System.out.print('\n');
+            for (int col = 0; col < getWidth(); col++) {
+                if(getTile(col, row).isExplosive()){
+                    System.out.print(1 + " ");
+                }
+                else{
+                    System.out.print(0 + " ");
+                }
+            }
+        }
+        System.out.print('\n');
+        System.out.println("Dit is het veld");
     }
 
 }
