@@ -1,7 +1,13 @@
 package model;
 
 import view.TileView;
+
+
+import java.time.temporal.Temporal;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.time.*;
 
 public class Minesweeper extends AbstractMineSweeper {
 
@@ -13,12 +19,19 @@ public class Minesweeper extends AbstractMineSweeper {
     private int flagCounter;
     private int countingClicks;
 
+    private LocalDateTime startTime = LocalDateTime.now();
+    private Timer timer = new Timer();
+    private TimerTask timerTask;
+
 
     public Minesweeper(){
     }
 
     public AbstractTile[][] getBoard() {
         return board;
+    }
+    public Temporal getStartTime() {
+        return startTime;
     }
 
 
@@ -54,6 +67,9 @@ public class Minesweeper extends AbstractMineSweeper {
 
         this.viewNotifier.notifyNewGame(row,col);
         setWorld(board);
+        startTime = LocalDateTime.now();
+        timerTask = new Stopwatch(this);
+        timer.schedule(timerTask, 0, 1000);
 
     }
 
@@ -124,6 +140,7 @@ public class Minesweeper extends AbstractMineSweeper {
 
         // wat als het een bom is
         if (getTile(x,y).isExplosive()){
+            timerTask.cancel();
             this.viewNotifier.notifyExploded(x, y);
             openAllBombs();
             this.viewNotifier.notifyGameLost();
@@ -138,6 +155,7 @@ public class Minesweeper extends AbstractMineSweeper {
             }
             getTile(x,y).open();
             if (playercounter == 0) {
+                timerTask.cancel();
                 this.viewNotifier.notifyGameWon();
                 System.out.println("you win");
             }
@@ -252,5 +270,6 @@ public class Minesweeper extends AbstractMineSweeper {
         System.out.print('\n');
         System.out.println("Dit is het veld");
     }
+
 
 }
