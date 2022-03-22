@@ -18,7 +18,7 @@ public class Minesweeper extends AbstractMineSweeper {
 
     }
 
-    //TODO hoe weten wannneer je gewonnen bent aka wanneer heb je alle tegels geopend-->line73
+    //TODO hoe weten wanneer je gewonnen bent aka wanneer heb je alle tegels geopend-->line73
     //TODO eerst tegel mag geen bom zijn.
 
 
@@ -135,38 +135,37 @@ public class Minesweeper extends AbstractMineSweeper {
 
     @Override
     public void open(int x, int y) {
+
         if (getTile(x,y).isFlagged()){
             unflag(x,y);
+        }
+
+        countingClicks++;
+        //Als eerste bom is
+        if (countingClicks == 1){
+            firstTileRule(x,y);
+            System.out.println("was bom verandert");
         }
 
 
         // wat als het een bom is
         if (getTile(x,y).isExplosive()){
-            countingClicks = countingClicks + 1;
-            if (countingClicks == 1){
-                //TODO roep method op om bom te verwiselen met een lege tile.
-            }
-            else{
-                this.viewNotifier.notifyExploded(x, y);
-                this.viewNotifier.notifyGameLost();
-            }
+            this.viewNotifier.notifyExploded(x, y);
+            openAllBombs();
+            this.viewNotifier.notifyGameLost();
             System.out.println("Tile [" + x + ";" + y + "] opened it was a bomb you are dead");
 
         }
         // wat als het geen bom is
         else{
             this.viewNotifier.notifyOpened(x,y, getCountExplosiveNeighbours(x,y));
-
-
             if (!getTile(x ,y).isOpened()){
-                playercounter = playercounter - 1;
-                countingClicks = countingClicks + 1;
+                playercounter--;
             }
             getTile(x,y).open();
-
-
             if (playercounter == 0) {
                 this.viewNotifier.notifyGameWon();
+                System.out.println("you win");
             }
             if (getCountExplosiveNeighbours(x,y) ==0) {
                 for (int i = x - 1; i < x + 2; i++) {
@@ -221,4 +220,28 @@ public class Minesweeper extends AbstractMineSweeper {
         Tile bomb = new Tile(true);
         return bomb;
     }
+    public void openAllBombs(){
+        for (int row = 0; row < getHeight(); row++) {
+            for (int col = 0; col < getWidth(); col++) {
+                if(getTile(col, row).isExplosive()){
+                    this.viewNotifier.notifyExploded(col, row);
+                }
+            }
+        }
+    }
+
+    public void firstTileRule(int x, int y){
+        board[y][x] = generateEmptyTile();
+        boolean changed = false;
+        Random r = new Random();
+        while (!changed){
+            int row = r.nextInt(getHeight());
+            int col = r.nextInt(getWidth());
+            if (!getTile(col,row).isExplosive()){
+                board[row][col] = generateExplosiveTile();
+                changed=true;
+            }
+        }
+    }
+
 }

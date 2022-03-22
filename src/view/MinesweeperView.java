@@ -179,11 +179,12 @@ public class MinesweeperView implements IGameStateNotifier {
     public void notifyGameLost() {
         this.removeAllTileEvents();
         //throw new UnsupportedOperationException();
+
     }
     @Override
     public void notifyGameWon() {
         this.removeAllTileEvents();
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 
     private void removeAllTileEvents() {
