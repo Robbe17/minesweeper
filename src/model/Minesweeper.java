@@ -67,9 +67,9 @@ public class Minesweeper extends AbstractMineSweeper {
 
         this.viewNotifier.notifyNewGame(row,col);
         setWorld(board);
-        startTime = LocalDateTime.now();
-        timerTask = new Stopwatch(this);
-        timer.schedule(timerTask, 0, 1000);
+//        startTime = LocalDateTime.now();
+//        timerTask = new Stopwatch(this);
+//        timer.schedule(timerTask, 0, 1000);
 
     }
 
@@ -132,6 +132,9 @@ public class Minesweeper extends AbstractMineSweeper {
         countingClicks++;
         //Als eerste bom is
         if (countingClicks == 1){
+            startTime = LocalDateTime.now();
+            timerTask = new Stopwatch(this);
+            timer.schedule(timerTask, 0, 1000);
             firstTileRule(x,y);
             System.out.println("was bom verandert");
             printBoard();
@@ -242,15 +245,17 @@ public class Minesweeper extends AbstractMineSweeper {
     }
 
     public void firstTileRule(int x, int y){
-        board[y][x] = generateEmptyTile();
-        boolean changed = false;
-        Random r = new Random();
-        while (!changed){
-            int row = r.nextInt(getHeight());
-            int col = r.nextInt(getWidth());
-            if (!getTile(col,row).isExplosive()){
-                board[row][col] = generateExplosiveTile();
-                changed=true;
+        if (getTile(x,y).isExplosive()) {
+            board[y][x] = generateEmptyTile();
+            boolean changed = false;
+            Random r = new Random();
+            while (!changed) {
+                int row = r.nextInt(getHeight());
+                int col = r.nextInt(getWidth());
+                if (!getTile(col, row).isExplosive()) {
+                    board[row][col] = generateExplosiveTile();
+                    changed = true;
+                }
             }
         }
     }
